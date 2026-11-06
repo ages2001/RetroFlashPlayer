@@ -1,0 +1,30 @@
+#include <winver.h>
+#include "../src/version.h"
+
+1 ICON "flashnt.ico"
+
+1 VERSIONINFO
+FILEVERSION APP_VER_NUM
+PRODUCTVERSION APP_VER_NUM
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "ages2001"
+            VALUE "FileDescription", "Retro Flash Player"
+            VALUE "FileVersion", "1.0"
+            VALUE "InternalName", "RETROFP"
+            VALUE "LegalCopyright", "by ages2001"
+            VALUE "OriginalFilename", "RETROFP.EXE"
+            VALUE "ProductName", "Retro Flash Player"
+            VALUE "ProductVersion", "1.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

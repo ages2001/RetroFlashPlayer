@@ -1,0 +1,10 @@
+flashnt-host
+frame_*.png
+build/obj/
+build/test_*
+!build/tests/
+dist/
+*.o
+*.exe
+*.EXE
+*.sav

@@ -1,0 +1,71 @@
+FLASHNT NT runtime math library (src/ntmath*.c, src/ntmath.h)
+=============================================================
+
+The NT 3.1 build does not link a C runtime DLL; src/ntcrt.c provides the C
+library and src/ntmath*.c provide <math.h>.  They are only compiled into
+FLASHNT.EXE by build/mingw-nt31.sh; the Linux build uses glibc's libm.
+The goal is bit-for-bit agreement with glibc, which the test suites use.
+
+Third-party code in these files and its licences:
+
+1. exp, log, pow and their tables (src/ntmath.c) are the ARM
+   optimized-routines algorithms (the same code glibc and musl use), taken
+   from musl libc.  fmod (src/ntmath.c) is adapted from musl libc.
+
+     exp, log, pow: Copyright (c) 2018, Arm Limited.
+                    SPDX-License-Identifier: MIT
+     musl libc:     Copyright (c) 2005-2020 Rich Felker, et al.  (MIT)
+
+2. sin, cos, tan, asin, acos, atan, atan2 (src/ntmath_sin.c,
+   src/ntmath_cos.c, src/ntmath_tan.c, src/ntmath_asin.c, src/ntmath_acos.c,
+   src/ntmath_atan.c, src/ntmath_atan2.c) are ports of the correctly rounded
+   binary64 functions of the CORE-MATH project
+   (https://core-math.gitlabpages.inria.fr/), MIT licence:
+
+     sin:   Copyright (c) 2022-2026 Paul Zimmermann and Tom Hubrecht and
+            Alexei Sibidanov
+     cos:   Copyright (c) 2022-2025 Paul Zimmermann and Tom Hubrecht
+     tan:   Copyright (c) 2022-2025 Paul Zimmermann and Tom Hubrecht
+     asin:  Copyright (c) 2022-2026 Alexei Sibidanov
+     acos:  Copyright (c) 2024-2025 Alexei Sibidanov
+     atan:  Copyright (c) 2023-2026 Alexei Sibidanov
+     atan2: Copyright (c) 2024-2025 Paul Zimmermann and Alexei Sibidanov
+            (tint.h: Copyright (c) 2023-2024 Paul Zimmermann and Alexei
+            Sibidanov)
+
+   The port (C89 with GNU extensions, i386/x87 without 128-bit integers or
+   hardware fma) keeps the algorithms and tables; each file still carries
+   its original notice.
+
+glibc's own sin/cos/tan/asin/acos/atan/atan2 (the IBM Accurate
+Mathematical Library, LGPL-2.1-or-later) were deliberately not used.
+Since glibc 2.28-2.35 dropped their slow paths they are no longer
+correctly rounded, so the correctly rounded CORE-MATH results differ from
+glibc in about 0.1% of random arguments, always by one ulp, where glibc
+rounds the wrong way.
+
+The software fma uses the round-to-odd emulation of S. Boldo and
+G. Melquiond, "Emulation of a FMA and correctly rounded sums: proved
+algorithms using rounding to odd", IEEE Transactions on Computers 57(4),
+2008 (an algorithm, no code taken).
+
+-----------------------------------------------------------------------------
+MIT License (applies to the code listed in 1. and 2.)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
